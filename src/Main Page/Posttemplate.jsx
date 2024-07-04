@@ -23,7 +23,7 @@ function Posttemplate({ post }) {
     <div className=" rounded-xl pt-4 w-1/2 border border-gray-600 mt-[10px]">
       <h2 className=" text-[20px] px-8 text-bold">{post.title}</h2>
       {post.imagePresent && (
-        <div className="mt-1 mx-8 flex justify-center bg-black">
+        <div className="mt-1 mx-8 flex justify-center bg-[#22272b]">
           <img
             src={imageSrc}
             alt={post.title}
