@@ -8,8 +8,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from rest_framework.views import APIView
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, APIException
 import jwt, datetime
+from .authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
+from rest_framework.authentication import get_authorization_header
 
 """
 class LoginInfoViewSet(ModelViewSet):
@@ -37,46 +39,79 @@ class LoginView(APIView):
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect password!')
         
-        payload = {
-            'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow()
-        }
-
-        token = jwt.encode(payload, 'secret', algorithm='HS256') #.decode('utf-8')
+        access_token = create_access_token(user.id)
+        refresh_token = create_refresh_token(user.id)
 
         response = Response()
-        response.set_cookie(key='jwt', value=token, httponly=True)
+        response.set_cookie(key='refreshToken', value=refresh_token, httponly=True)
         response.data = {
-            'jwt': token
+            'token': access_token
         }
         return response
+        # payload = {
+        #     'id': user.id,
+        #     'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=30),
+        #     'iat': datetime.datetime.utcnow()
+        # }
+
+        # token = jwt.encode(payload, 'secret', algorithm='HS256') #.decode('utf-8')
+
+        # response = Response()
+        # response.set_cookie(key='jwt', value=token, httponly=True)
+        # response.data = {
+        #     'jwt': token
+        # }
+        # return response
     
 class UserView(APIView):
     def get(self, request):
-        token = request.COOKIES.get('jwt')
+        auth = get_authorization_header(request).split()
 
-        if not token:
-            raise(AuthenticationFailed('Unauthenticated!'))
+        if auth and len(auth) == 2:
+            token = auth[1].decode('utf-8')
+            id = decode_access_token(token)
+
+            user = User.objects.filter(pk=id).first()
+            return Response(UserSerializer(user).data)
+        raise AuthenticationFailed('Unauthenticated!')
+        # token = request.COOKIES.get('jwt')
+
+        # if not token:
+        #     raise(AuthenticationFailed('Unauthenticated!'))
         
-        try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise(AuthenticationFailed('Unauthenticated!'))
+        # try:
+        #     payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        # except jwt.ExpiredSignatureError:
+        #     raise(AuthenticationFailed('Unauthenticated!'))
         
-        user = User.objects.filter(id=payload['id']).first()
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+        # user = User.objects.filter(id=payload['id']).first()
+        # serializer = UserSerializer(user)
+        # return Response(serializer.data)
 
 class LogoutView(APIView):
-    def post(self, request):
+    def post(self, _):
         response = Response()
-        response.delete_cookie('jwt')
+        response.delete_cookie(key='refreshToken')
         response.data = {
             'message': 'success'
         }
         return response
+    # def post(self, request):
+    #     response = Response()
+    #     response.delete_cookie('jwt')
+    #     response.data = {
+    #         'message': 'success'
+    #     }
+    #     return response
 
+class RefreshView(APIView):
+    def post(self, request):
+        refresh_token = request.COOKIES.get('refreshToken')
+        id = decode_refresh_token(refresh_token) # raises exception if cookie expired
+        access_token = create_access_token(id)
+        return Response({
+            'token': access_token
+        })
 """@api_view(['POST'])
 def verify(request):
     if(request.method == 'POST'):

@@ -133,3 +133,7 @@ AUTH_USER_MODEL = 'socialmed.User'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'socialmed.api.exceptions.status_code_handler'
+}
