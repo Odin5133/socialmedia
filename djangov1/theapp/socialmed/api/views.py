@@ -107,6 +107,7 @@ class LogoutView(APIView):
 class RefreshView(APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refreshToken')
+        print(refresh_token)
         id = decode_refresh_token(refresh_token) # raises exception if cookie expired
         access_token = create_access_token(id)
         return Response({

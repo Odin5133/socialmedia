@@ -29,4 +29,5 @@ def decode_refresh_token(token):
         payload = jwt.decode(token, 'refresh_secret', algorithms=['HS256'])
         return payload['user_id']
     except:
+        print("HelloWorld")
         raise exceptions.AuthenticationFailed('Unauthenticated!')

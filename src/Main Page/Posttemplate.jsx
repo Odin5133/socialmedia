@@ -29,7 +29,7 @@ function Posttemplate({ post }) {
             alt={post.title}
             onLoad={loadImage}
             data-src={post.imageUrl}
-            className=" max-h-1/2 "
+            className=" "
           />
         </div>
       )}

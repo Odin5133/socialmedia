@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function SignUp() {
   const [username, setUsername] = useState("");
@@ -15,6 +16,21 @@ function SignUp() {
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+  };
+
+  const handleSignUp = () => {
+    if (email == "" || password == "") {
+      alert("Please fill all the fields");
+      return;
+    }
+    axios
+      .post("http://127.0.0.1:8000/api/register/", {
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
   };
 
   return (
@@ -50,7 +66,10 @@ function SignUp() {
             onChange={handlePasswordChange}
           />
           <br />
-          <button className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+          <button
+            className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+            onClick={handleSignUp}
+          >
             Sign Up
           </button>
         </div>

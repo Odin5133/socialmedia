@@ -14,32 +14,32 @@ function SignIn() {
 
   useEffect(() => {
     axios
-      .get("https://api.escuelajs.co/api/v1/auth/profile", {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        },
-      })
+      .post("http://127.0.0.1:8000/api/refresh/")
       .then((response) => {
-        console.log(response.data);
+        Cookies.set("accessToken", response.data.token, {
+          expires: 1,
+          secure: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   });
 
   const handleSignIn = () => {
-    let user = username;
-    let pass = password;
     axios
-      .post("https://api.escuelajs.co/api/v1/auth/login", {
-        email: "john@mail.com",
-        password: "changeme",
-      })
+      .post(
+        "http://127.0.0.1:8000/api/login/",
+        {
+          email: username,
+          password: password,
+        },
+        { withCredentials: true }
+      )
       .then((response) => {
         console.log(response.data);
-        Cookies.set("accessToken", response.data.access_token, {
-          expires: 7,
-          secure: true,
-        });
-        Cookies.set("refreshToken", response.data.refresh_token, {
-          expires: 30,
+        Cookies.set("accessToken", response.data.token, {
+          expires: 1,
           secure: true,
         });
       });
