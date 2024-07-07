@@ -34,7 +34,21 @@ function SignIn() {
   //       )
   //     );
   // });
-
+  useEffect(() => {
+    axios
+      .post("http://127.0.0.1:8000/api/refresh/", {Cookies}, { withCredentials: true })
+      .then((response) => {
+        // Cookies.set("accessToken", response.data.token, {
+        //   sameSite: "None"
+        // });
+        // do we need to check response.status == 200?
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data['token']}`;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  
   const handleSignIn = (e) => {
     e.preventDefault();
     fetch("http://127.0.0.1:8000/api/login/", {
@@ -52,9 +66,7 @@ function SignIn() {
       .then((data) => {
         console.log("Login successful:", data);
         // Assuming the accessToken is still being sent in the response body
-        Cookies.set("accessToken", data.token, {
-          expires: 1, // 1 day
-        });
+        axios.defaults.headers.common['Authorization'] = `Bearer ${data['token']}`;
       })
       .catch((error) => {
         console.error("Login error:", error);
