@@ -11,7 +11,7 @@ def create_access_token(id):
 def create_refresh_token(id):
     return jwt.encode({
         'user_id': id,
-        'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=1),
+        'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=5),
         'iat': datetime.datetime.utcnow(),
         #'allowed_resources': ['__all__']
     }, 'refresh_secret', algorithm='HS256')

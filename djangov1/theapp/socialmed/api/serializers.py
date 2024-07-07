@@ -1,19 +1,19 @@
 from rest_framework import serializers
 from ..models import User
-#from rest_framework.validators import UniqueValidator
+from rest_framework.validators import UniqueValidator
 
-# class loginInfoSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password')
+class loginInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'password')
 
-# class signupSerializer(serializers.Serializer):
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password')
-#         extra_kwargs = {
-#             'username' : {'unique': True},
-#         }
+class signupSerializer(serializers.Serializer):
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+        extra_kwargs = {
+            'username' : {'unique': True},
+        }
         
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

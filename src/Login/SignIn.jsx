@@ -36,19 +36,27 @@ function SignIn() {
   // });
   useEffect(() => {
     axios
-      .post("http://127.0.0.1:8000/api/refresh/", {Cookies}, { withCredentials: true })
+      .post(
+        "http://127.0.0.1:8000/api/refresh/",
+        { Cookies },
+        { withCredentials: true }
+      )
       .then((response) => {
         // Cookies.set("accessToken", response.data.token, {
         //   sameSite: "None"
         // });
         // do we need to check response.status == 200?
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data['token']}`;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data["token"]}`;
+        console.log("Yippee ki-yay, mother");
+        console.log(response.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  });
-  
+  }, []);
+
   const handleSignIn = (e) => {
     e.preventDefault();
     fetch("http://127.0.0.1:8000/api/login/", {
@@ -66,10 +74,45 @@ function SignIn() {
       .then((data) => {
         console.log("Login successful:", data);
         // Assuming the accessToken is still being sent in the response body
-        axios.defaults.headers.common['Authorization'] = `Bearer ${data['token']}`;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${data["token"]}`;
       })
       .catch((error) => {
         console.error("Login error:", error);
+      });
+  };
+
+  const test = (e) => {
+    e.preventDefault();
+    // axios
+    //   .post("http://127.0.0.1:8000/api/logout/")
+    //   .then((response) => {
+    //     // axios.defaults.headers.common[
+    //     //   "Authorization"
+    //     // ] = `Bearer ${response.data["token"]}`;
+    //     console.log("Yippee ki-yay, mother");
+    //     console.log(response.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    fetch("http://127.0.0.1:8000/api/logout/", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json(); // main learning that I got from this is that we need to return response.json() to execute django html code that is being returned
+      })
+      .then((data) => {
+        console.log("Yippee ki-yay, mother");
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -106,6 +149,13 @@ function SignIn() {
               type="submit"
             >
               Sign In
+            </button>
+            <br />
+            <button
+              className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+              onClick={test}
+            >
+              Sign Out
             </button>
           </form>
         </div>

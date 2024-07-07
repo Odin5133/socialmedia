@@ -91,9 +91,11 @@ class UserView(APIView):
 class LogoutView(APIView):
     def post(self, _):
         response = Response()
-        response.delete_cookie(key='refreshToken')
+        response.delete_cookie(key='refreshToken',  samesite='None')
+        # response.set_cookie(key='refreshToken', value="", httponly=True, samesite='None', secure=True)
         response.data = {
             'message': 'success'
+            
         }
         return response
     # def post(self, request):
