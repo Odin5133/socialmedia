@@ -12,7 +12,6 @@ from rest_framework.exceptions import AuthenticationFailed, APIException
 import jwt, datetime
 from .authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 from rest_framework.authentication import get_authorization_header
-from datetime import datetime, timedelta
 
 """
 class LoginInfoViewSet(ModelViewSet):
@@ -42,9 +41,9 @@ class LoginView(APIView):
         
         access_token = create_access_token(user.id)
         refresh_token = create_refresh_token(user.id)
-        expiry_date = datetime.now() + timedelta(days=30)
+
         response = Response()
-        response.set_cookie(key='refreshToken', value=refresh_token, httponly=False, expires=expiry_date)
+        response.set_cookie(key='refreshToken', value=refresh_token, httponly=True, samesite='None', secure=True)
         response.data = {
             'token': access_token
         }
@@ -67,8 +66,8 @@ class LoginView(APIView):
 class UserView(APIView):
     def get(self, request):
         auth = get_authorization_header(request).split()
+
         if auth and len(auth) == 2:
-            print(auth)
             token = auth[1].decode('utf-8')
             id = decode_access_token(token)
 
