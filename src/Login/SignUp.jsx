@@ -2,20 +2,20 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function SignUp() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [usernameSignUp, setUsernameSignUp] = useState("");
+  const [emailSignUp, setEmailSignUp] = useState("");
+  const [passwordSignUp, setPasswordSignUp] = useState("");
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const handleUsernameChangeSignUp = (e) => {
+    setUsernameSignUp(e.target.value);
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleEmailChangeSignUp = (e) => {
+    setEmailSignUp(e.target.value);
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handlePasswordChangeSignUp = (e) => {
+    setPasswordSignUp(e.target.value);
   };
 
   const handleSignUp = () => {
@@ -46,24 +46,24 @@ function SignUp() {
             type="text"
             className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
             placeholder="Username"
-            value={username}
-            onChange={handleUsernameChange}
+            value={usernameSignUp}
+            onChange={handleUsernameChangeSignUp}
           />
           <div className=" mt-8">E-Mail</div>
           <input
             type="text"
             className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
             placeholder="Email"
-            value={email}
-            onChange={handleEmailChange}
+            value={emailSignUp}
+            onChange={handleEmailChangeSignUp}
           />
           <div className=" mt-8">Password</div>
           <input
             type="password"
             className="mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
             placeholder="Password"
-            value={password}
-            onChange={handlePasswordChange}
+            value={passwordSignUp}
+            onChange={handlePasswordChangeSignUp}
           />
           <br />
           <button
