@@ -13,7 +13,7 @@ import {
 function Posttemplate({ post }) {
   const [imageSrc, setImageSrc] = useState(Temp);
 
-  console.log(post);
+  // console.log(post);
 
   const loadImage = () => {
     setImageSrc(post.imageUrl);

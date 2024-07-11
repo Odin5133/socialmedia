@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Posttemplate from "./Posttemplate";
+import FriendsPanel from "./FriendsPanel";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -29,7 +30,7 @@ function Feed() {
               : (post.Description = false);
           });
           setPosts(updatedPosts);
-          console.log(posts);
+          // console.log(posts);
         } else {
           console.error("Response is not an array:", response.data);
         }
@@ -66,11 +67,14 @@ function Feed() {
   }, [posts]); // Re-run when posts update
 
   return (
-    <div className="flex flex-col items-center w-full">
-      <h1>Feed</h1>
-      {posts.map((post) => (
-        <Posttemplate key={post.id} post={post} />
-      ))}
+    <div className="flex justify-center my-20">
+      <div className="flex flex-col items-center w-full ">
+        <h1>Feed</h1>
+        {posts.map((post) => (
+          <Posttemplate key={post.id} post={post} />
+        ))}
+      </div>
+      <FriendsPanel />
     </div>
   );
 }

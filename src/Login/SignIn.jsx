@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
   const [username, setUsername] = useState("");
@@ -66,8 +67,12 @@ function SignIn() {
   //         error
   //       )
   //     );
-  // });
+  // }, []);
   useEffect(() => {
+    createAccessToken();
+  }, []);
+
+  const createAccessToken = () => {
     axios
       .post(
         "http://127.0.0.1:8000/api/refresh/",
@@ -84,11 +89,14 @@ function SignIn() {
         ] = `Bearer ${response.data["token"]}`;
         console.log("Yippee ki-yay, mother");
         console.log(response.data);
+        Cookies.set("accessToken", response.data.token, { expires: 7 });
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
+
+  const navigate = useNavigate();
 
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -110,10 +118,12 @@ function SignIn() {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data["token"]}`;
+        navigate("/feed");
       })
       .catch((error) => {
         console.error("Login error:", error);
       });
+    createAccessToken();
   };
 
   const test = (e) => {
@@ -138,7 +148,7 @@ function SignIn() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.json(); // main learning that I got from this is that we need to return response.json() to execute django html code that is being returned
+        // return response.json(); // main learning that I got from this is that we need to return response.json() to execute django html code that is being returned
       })
       .then((data) => {
         console.log("Yippee ki-yay, mother");
@@ -211,12 +221,12 @@ function SignIn() {
                   Sign In
                 </motion.button>
                 <br />
-                {/* <button
-                className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
-                onClick={test}
-              >
-                Sign Out
-              </button> */}
+                <button
+                  className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                  onClick={test}
+                >
+                  Sign Out
+                </button>
               </form>
             </div>
           ) : (
