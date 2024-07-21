@@ -6,10 +6,12 @@ export default {
     colors: {
       text: "#e4f5fb",
       background: "#353d41",
-      pseudobackground: "#59676e",
+      pseudobackground: "#181c1f",
+      pseudobackground2: "#59676e",
       primary: "#fc88b4",
       secondary: "#fc88b4",
       accent: "#8220e1",
+      accent2: "#46107b",
     },
     fontSize: {
       sm: "0.750rem",

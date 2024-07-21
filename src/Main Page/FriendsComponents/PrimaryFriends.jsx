@@ -19,11 +19,11 @@ function PrimaryComp() {
   }, []);
 
   return (
-    <div className="h-[36vh] overflow-y-scroll">
+    <div className="h-[36vh] overflow-y-scroll no-scrollbar">
       {curFriends.map((x) => (
         <div
           key={`${x.firstName}-${x.lastName}`}
-          className="flex gap-2 border-2 border-accent bg-background text-text p-2 m-2 rounded-xl overflow-hidden text-ellipsis h-[8vh]"
+          className="flex gap-2 border-1 border border-primary bg-background text-text p-2 m-2 rounded-xl overflow-hidden text-ellipsis h-[8vh]"
         >
           <img
             src="https://avatar.iran.liara.run/public"
@@ -31,7 +31,7 @@ function PrimaryComp() {
             className=" h-full"
           />
           <div className="">
-            <div className="font-body">
+            <div className="font-body text-lg">
               {x.firstName} {x.lastName}
             </div>
             <div className=" text-ellipsis truncate text-sm ">{x.quote}</div>

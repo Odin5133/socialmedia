@@ -20,8 +20,8 @@ function Posttemplate({ post }) {
   };
 
   return (
-    <div className=" rounded-xl pt-4 w-1/2 border border-gray-600 mt-[10px]">
-      <h2 className=" text-[20px] px-8 text-bold">{post.title}</h2>
+    <div className=" rounded-xl pt-4 w-[90vw] border border-gray-600 mt-[10px] bg-pseudobackground md:w-[45vw] lg:w-[45w]">
+      <h2 className=" text-xl  px-8 text-bold">{post.title}</h2>
       {post.imagePresent && (
         <div className="mt-1 mx-8 flex justify-center bg-[#22272b]">
           <img
@@ -34,7 +34,7 @@ function Posttemplate({ post }) {
         </div>
       )}
       {post.Description && (
-        <p className=" font-normal text-[12px] mt-1 px-8">{post.body}</p>
+        <p className=" text-[#899bad]  text-[0.95rem] mt-1 px-8">{post.body}</p>
       )}
       <div className="flex px-8 justify-between mb-4 mt-[10px] ">
         <div className="flex items-center">

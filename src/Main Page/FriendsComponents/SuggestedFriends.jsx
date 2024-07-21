@@ -19,7 +19,7 @@ function SuggestedFriends() {
   }, []);
 
   return (
-    <div className="h-[36vh] overflow-y-scroll">
+    <div className="h-[36vh] overflow-y-scroll no-scrollbar">
       {curFriends.map((x) => (
         <div
           key={`${x.firstName}-${x.lastName}`}
