@@ -32,14 +32,15 @@ function SignIn() {
   };
 
   const handleSignUp = () => {
-    if (email == "" || password == "") {
+    if (emailSignUp == "" || passwordSignUp == "") {
       alert("Please fill all the fields");
       return;
     }
     axios
       .post("http://127.0.0.1:8000/api/register/", {
-        email: email,
-        password: password,
+        username: usernameSignUp,
+        email: emailSignUp,
+        password: passwordSignUp,
       })
       .then((res) => {
         console.log(res.data);
@@ -160,10 +161,10 @@ function SignIn() {
   };
 
   return (
-    <div className=" bg-[#000] p-[1vh] m-0 h-screen">
-      <div className=" w-[35vw] h-[98vh]  bg-background rounded-xl font-heading ">
-        <div className="ml-8">
-          <div className="  pt-32  text-5xl  text-primary leading-[0.9]">
+    <div className="bg-[#000] p-[1vh] m-0 h-screen flex justify-center md:justify-start sm:p-[1vh]">
+      <div className=" md:w-[37vw]    bg-background rounded-xl font-heading ">
+        <div className="mx-8 flex flex-col justify-center h-full">
+          <div className="      text-5xl  text-primary leading-[0.9]">
             {signOps ? "Welcome Back" : "Let's Get Started"}
           </div>
           <div className="text-secondary text-xl">
@@ -171,7 +172,7 @@ function SignIn() {
               ? "Dive into your personalized haven"
               : "Ready for a new chapter!"}
           </div>
-          <div className="flex  rounded-md mt-16 gap-2 w-[90%] justify-around px-2 relative items-center text-xl text-text border-primary border-2">
+          <div className="flex  rounded-md mt-12 gap-2 w-[90%] justify-around px-2 relative items-center text-xl text-text border-primary border-2">
             <motion.div
               className=" absolute w-[49%] rounded-md h-[calc(100%-5px)]  bg-accent "
               initial={{ x: "-50%" }}
@@ -266,15 +267,17 @@ function SignIn() {
                 transition={{ type: "spring", stiffness: 300, damping: 29 }}
               />
               <br />
-              <motion.button
-                initial={{ y: "-170%" }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 29 }}
-                className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
-                onClick={handleSignUp}
-              >
-                Sign Up
-              </motion.button>
+              <div className="flex w-full  justify-center md:justify-start">
+                <motion.button
+                  initial={{ y: "-170%" }}
+                  animate={{ y: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 29 }}
+                  className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent "
+                  onClick={handleSignUp}
+                >
+                  Sign Up
+                </motion.button>
+              </div>
             </div>
           )}
         </div>

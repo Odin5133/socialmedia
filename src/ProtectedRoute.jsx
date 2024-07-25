@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function ProtectedRoute({ Component, ...rest }) {
-  const [isAuth, setIsAuth] = useState(1);
+  const [isAuth, setIsAuth] = useState(0);
   const navigate = useNavigate();
 
   const createAccessToken = () => {
@@ -35,7 +35,7 @@ function ProtectedRoute({ Component, ...rest }) {
   };
 
   useEffect(() => {
-    console.log(`Bearer ${Cookies.get("accessToken")}`);
+    // console.log(`Bearer ${Cookies.get("accessToken")}`);
     fetch("http://127.0.0.1:8000/api/user/", {
       method: "GET",
       headers: {

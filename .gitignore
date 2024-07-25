@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 /djangov1/venv
 /djangov1/theapp/socialmed/__pycache__
+/djangov1

@@ -2,7 +2,22 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        likeAnimation: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
+        },
+        dislikeAnimation: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(5px)" },
+        },
+      },
+      animation: {
+        like: "likeAnimation 0.5s ease",
+        dislike: "dislikeAnimation 0.5s ease",
+      },
+    },
     colors: {
       text: "#e4f5fb",
       background: "#353d41",
