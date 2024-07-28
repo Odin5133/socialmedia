@@ -32,16 +32,16 @@ function ProfilePage() {
   }, []);
 
   return (
-    <div className="text-text w-[56vw] bg-pseudobackground h-screen flex flex-col mt-8 rounded-xl">
+    <div className="text-text w-[56vw] bg-pseudobackground  flex flex-col mt-8 rounded-xl">
       <img
-        src={ProfileBanner}
+        src={user.profileBanner}
         alt="Profile Banner"
         className="w-full h-48 object-cover rounded-t-xl"
       />
       <div className="w-full max-w-4xl p-4">
         <div className="flex ml-[1vw]">
           <img
-            src={ProfilePic}
+            src={user.profilePic}
             alt="Profile Pic"
             className="rounded-full border-4 border-[#000] shadow-lg h-32 w-32 -mt-16 mb-4"
           />

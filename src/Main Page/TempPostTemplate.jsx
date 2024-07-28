@@ -24,15 +24,15 @@ function Posttemplate({ post }) {
       <h2 className=" text-xl  px-8 text-bold">{post.title}</h2>
       {post.image && (
         <div className="mt-1 mx-8 flex justify-center bg-[#22272b]">
-          {/* <img
+          <img
             src={imageSrc}
             alt={post.title}
             onLoad={loadImage}
             data-src={post.image}
             className=" "
-          /> */}
+          />
           {/* <img src={post.image} alt={post.title} className=" " /> */}
-          {post.image}
+          {/* {post.image} */}
         </div>
       )}
       {post.body && (
