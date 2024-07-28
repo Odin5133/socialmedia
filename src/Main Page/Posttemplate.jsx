@@ -8,35 +8,77 @@ import {
   IconBookmarks,
   IconBookmarksFilled,
 } from "@tabler/icons-react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 // Posttemplate.jsx
-function Posttemplate({ post, userReacted }) {
+function Posttemplate({ post }) {
   const [imageSrc, setImageSrc] = useState(Temp);
-  const [liked, setLiked] = useState(userReacted === 1 ? true : false);
+  const [liked, setLiked] = useState(post.userReacted === 1 ? true : false);
   const [animate, setAnimate] = useState(false);
-  const [disliked, setDisliked] = useState(userReacted === 2 ? true : false);
+  const [disliked, setDisliked] = useState(
+    post.userReacted === 2 ? true : false
+  );
   const [dislikeAnimate, setDislikeAnimate] = useState(false);
-  const [likeCount, setLikeCount] = useState(post.reactions.likes);
-  const [dislikeCount, setDislikeCount] = useState(post.reactions.dislikes);
+  const [likeCount, setLikeCount] = useState(post.likesCount);
+  const [dislikeCount, setDislikeCount] = useState(post.dislikesCount);
   const [bookmarked, setBookmarked] = useState(false);
 
   // console.log(post);
 
+  const likePost = (flag) => {
+    console.log(flag, post.id);
+    axios
+      .post(
+        "http://127.0.0.1:8000/api/likePost/",
+        { addORremove: flag, postID: post.id },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
+
+  const DislikePost = (flag) => {
+    axios
+      .post(
+        "http://127.0.0.1:8000/api/dislikePost/",
+        { addORremove: flag, postID: post.id },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
+
   const loadImage = () => {
-    setImageSrc(post.imageUrl);
+    setImageSrc(post.image);
   };
 
   const toggleLike = () => {
+    // console.log(likeCount);
     if (liked) {
       setLikeCount(likeCount - 1);
+      likePost(false);
     } else {
       setLikeCount(likeCount + 1);
+      likePost(true);
     }
     setLiked(!liked);
     if (disliked) {
       setDisliked(false);
       setDislikeCount(dislikeCount - 1);
+      DislikePost(false);
     }
+    // console.log(likeCount);
     setAnimate(true);
     setTimeout(() => setAnimate(false), 500); // Reset animation to allow re-triggering
   };
@@ -44,14 +86,17 @@ function Posttemplate({ post, userReacted }) {
   const toggleDislike = () => {
     if (disliked) {
       setDislikeCount(dislikeCount - 1);
+      DislikePost(false);
     } else {
       setDislikeCount(dislikeCount + 1);
+      DislikePost(true);
     }
 
     setDisliked(!disliked);
     if (liked) {
       setLiked(false);
       setLikeCount(likeCount - 1);
+      likePost(false);
     }
     setDislikeAnimate(true);
     setTimeout(() => setDislikeAnimate(false), 500); // Reset animation to allow re-triggering
@@ -60,18 +105,18 @@ function Posttemplate({ post, userReacted }) {
   return (
     <div className=" rounded-xl pt-4 w-[90vw] border border-gray-600 mt-[10px] bg-pseudobackground md:w-[45vw] lg:w-[45w]">
       <h2 className=" text-xl  px-8 text-bold">{post.title}</h2>
-      {post.imagePresent && (
+      {post.image && (
         <div className="mt-1 mx-8 flex justify-center bg-[#22272b]">
           <img
             src={imageSrc}
             alt={post.title}
             onLoad={loadImage}
-            data-src={post.imageUrl}
+            data-src={post.image}
             className=" "
           />
         </div>
       )}
-      {post.Description && (
+      {post.body && (
         <p className=" text-[#899bad]  text-[0.95rem] mt-1 px-8">{post.body}</p>
       )}
       <div className="flex px-8 justify-between mb-4 mt-[10px] ">

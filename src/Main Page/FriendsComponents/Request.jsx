@@ -15,8 +15,11 @@ function Request() {
   }, []);
   return (
     <div>
-      {curFriends.map((x) => (
-        <div className="border-2 border-accent p-3 m-2 rounded-xl bg-background shadow-[5px_6px_15px_0px_rgba(165,_39,_255,_0.48)]">
+      {curFriends.map((x, i) => (
+        <div
+          className="border-2 border-accent p-3 m-2 rounded-xl bg-background shadow-[5px_6px_15px_0px_rgba(165,_39,_255,_0.48)]"
+          key={i}
+        >
           <div
             key={`${x.firstName}-${x.lastName}`}
             className="flex gap-2   overflow-hidden text-ellipsis h-[6vh]"

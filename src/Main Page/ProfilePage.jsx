@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import ProfileBanner from "/profileBanner.jpg";
 import ProfilePic from "/Billy.jpeg";
 import TempPosttemplate from "./TempPostTemplate";
+import Posttemplate from "./TempPostTemplate";
 
 function ProfilePage() {
   const [user, setUser] = useState({});
@@ -32,7 +33,7 @@ function ProfilePage() {
   }, []);
 
   return (
-    <div className="text-text w-[56vw] bg-pseudobackground  flex flex-col mt-8 rounded-xl">
+    <div className="text-text w-[56vw] bg-pseudobackground min-h-screen  flex flex-col mt-8 rounded-xl">
       <img
         src={user.profileBanner}
         alt="Profile Banner"
@@ -59,7 +60,7 @@ function ProfilePage() {
         <div className="mt-8 w-full flex flex-col items-center">
           {user.myposts &&
             user.myposts.map((post) => (
-              <TempPosttemplate key={post.id} post={post} />
+              <Posttemplate key={post.id} post={post} />
             ))}
         </div>
       </div>
