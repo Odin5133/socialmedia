@@ -16,7 +16,7 @@ function ProfilePage() {
         .post(
           "http://127.0.0.1:8000/api/profile/",
           {
-            user2: "hello",
+            user2: "test1",
           },
           {
             headers: {

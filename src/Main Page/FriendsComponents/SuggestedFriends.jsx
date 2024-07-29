@@ -1,8 +1,28 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function SuggestedFriends() {
   const [curFriends, setcurFriends] = useState([]);
+
+  const follow = async () => {
+    axios
+      .post(
+        "http://127.0.0.1:8000/api/sendFriendRequest/",
+        {
+          to_username: "hello1",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        // setUser(res.data);
+      });
+  };
 
   useEffect(() => {
     axios
@@ -34,7 +54,10 @@ function SuggestedFriends() {
             <div className="text-text font-body">
               {x.firstName} {x.lastName}
             </div>
-            <button className="text-text bg-accent py-1 mt-2 px-2 rounded-lg">
+            <button
+              className="text-text bg-accent py-1 mt-2 px-2 rounded-lg active:tracking-tight"
+              onClick={follow}
+            >
               Follow
             </button>
           </div>
