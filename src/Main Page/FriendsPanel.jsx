@@ -4,6 +4,7 @@ import PrimaryComp from "./FriendsComponents/PrimaryFriends";
 import Request from "./FriendsComponents/Request";
 import SuggestedFriends from "./FriendsComponents/SuggestedFriends";
 import Cookies from "js-cookie";
+import { motion } from "framer-motion";
 
 function FriendsPanel() {
   const [friendSection, setFriendsection] = useState("Primary");
@@ -31,20 +32,26 @@ function FriendsPanel() {
 
   return (
     <div className="min-w-[17vw] w-[17vw] hidden lg:block mt-8 ">
-      <div className="border-4 border-accent rounded-3xl px-2 pt-1 pb-3">
-        <span className="text-primary text-2xl tracking-normal font-body leading-relaxed pl-4">
+      <div className="border-4 border-accent rounded-3xl px-2 pt-1 pb-3 flex w-full justify-center flex-col">
+        <span className="text-primary text-2xl tracking-normal font-body leading-relaxed pl-4 ">
           Friends Tab
         </span>
-        <div className="flex justify-around text-text mb-2 mt-2 ">
+        <div className="flex justify-around text-text mb-2 w-full mt-2  ">
+          <motion.div
+            className=" absolute w-[7.5vw] rounded-md h-8  bg-accent z-0  "
+            initial={{ x: "-50%" }}
+            animate={{ x: friendSection === "Primary" ? "-50%" : "50%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 29 }}
+          />
           <div
             onClick={() => setFriendsection("Primary")}
-            className="text-lg font-body cursor-pointer"
+            className="text-lg font-body cursor-pointer z-10 w-[50%] flex justify-center"
           >
             Primary
           </div>
           <div
             onClick={() => setFriendsection("Suggested")}
-            className="text-lg font-body cursor-pointer"
+            className="text-lg font-body cursor-pointer z-10 w-[50%] flex justify-center"
           >
             Suggested
           </div>

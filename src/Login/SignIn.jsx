@@ -222,12 +222,6 @@ function SignIn() {
                   Sign In
                 </motion.button>
                 <br />
-                <button
-                  className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
-                  onClick={test}
-                >
-                  Sign Out
-                </button>
               </form>
             </div>
           ) : (

@@ -6,9 +6,14 @@ import Posttemplate from "./Posttemplate";
 import FriendsPanel from "./FriendsPanel";
 import NavPanel from "./NavPanel";
 import Navbar from "./Navbar";
+import { useLocation } from "react-router-dom";
+// import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
+import bg from "/bg.jpg";
 
 function Feed() {
   const [userName, setUserName] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
     console.log(`Bearer ${Cookies.get("accessToken")}`);
@@ -36,10 +41,13 @@ function Feed() {
       );
   }, []);
 
+  const isProfileRoute = /^\/feed\/profile\/[^/]+$/.test(location.pathname);
+
   return (
     <div>
+      <Toaster />
       <Navbar userName={userName} />
-      <div className="flex justify-evenly pt-[calc(8vh)] w-full bg-[#000] relative">
+      <div className="flex justify-evenly pt-[calc(8vh)] min-h-screen w-full bg-hero bg-contain  relative">
         <NavPanel userName={userName} />
         {/* <div className="flex flex-col items-center text-text font-body relative">
           {posts.map((post) => (
@@ -47,7 +55,7 @@ function Feed() {
           ))}
         </div> */}
         <Outlet />
-        <FriendsPanel />
+        {!isProfileRoute && <FriendsPanel />}
       </div>
     </div>
   );

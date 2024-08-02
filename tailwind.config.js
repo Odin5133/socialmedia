@@ -46,6 +46,9 @@ export default {
       normal: "400",
       bold: "700",
     },
+    backgroundImage: {
+      hero: "url('./public/bg.jpg')",
+    },
   },
   plugins: [],
 };

@@ -4,10 +4,12 @@ import axios from "axios";
 import Posttemplate from "./Posttemplate";
 import Cookies from "js-cookie";
 import TempPosttemplate from "./TempPostTemplate";
+import { IconGhost2Filled } from "@tabler/icons-react";
 
 function Feedx() {
   const [posts, setPosts] = useState([]);
   const observer = useRef(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // const fetchdata = async () => {
@@ -40,7 +42,7 @@ function Feedx() {
     //     console.log(error);
     //   }
     // };
-    const fetchData = async () => {
+    const fetchData = () => {
       axios
         .post(
           "http://127.0.0.1:8000/api/feed/",
@@ -54,7 +56,9 @@ function Feedx() {
         .then((res) => {
           console.log(res.data);
           setPosts(res.data);
-        });
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setLoading(false));
     };
     fetchData();
   }, []);
@@ -88,9 +92,31 @@ function Feedx() {
       {/* {posts.map((post) => (
         <Posttemplate key={post.id} post={post} userReacted={post.id % 3} />
       ))} */}
-      {posts && posts.map((post, i) => <Posttemplate key={i} post={post} />)}
+      {loading ? (
+        <div>Loading...</div>
+      ) : posts.length > 0 ? (
+        posts.map((post, i) => <Posttemplate key={i} post={post} />)
+      ) : (
+        <EmptyFeed />
+      )}
     </div>
   );
 }
+
+const EmptyFeed = () => {
+  return (
+    <div className="rounded-xl pt-4 w-[90vw]  mt-8 bg-pseudobackground md:w-[45vw] lg:w-[45w] font-body h-5/6 flex flex-col justify-evenly items-center ">
+      <div>
+        <IconGhost2Filled size={200} className=" text-background" />
+        <div className="mt-4 font-semibold text-pseudobackground2 text-base text-center">
+          Your Feed looks....... empty{" "}
+        </div>
+      </div>
+      <div className="mt-2 px-10 text-xl text-center ">
+        Follow some people or join some communities to see posts here
+      </div>
+    </div>
+  );
+};
 
 export default Feedx;

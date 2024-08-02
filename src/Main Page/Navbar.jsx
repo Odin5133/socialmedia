@@ -11,14 +11,108 @@ import {
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Navbar({ userName }) {
   // let [name, setName] = useState("Adrian Lobo");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const navigate = useNavigate();
+  const logout = (e) => {
+    e.preventDefault();
+    // axios
+    //   .post("http://127.0.0.1:8000/api/logout/")
+    //   .then((response) => {
+    //     // axios.defaults.headers.common[
+    //     //   "Authorization"
+    //     // ] = `Bearer ${response.data["token"]}`;
+    //     console.log("Yippee ki-yay, mother");
+    //     console.log(response.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    fetch("http://127.0.0.1:8000/api/logout/", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        // return response.json(); // main learning that I got from this is that we need to return response.json() to execute django html code that is being returned
+      })
+      .then((data) => {
+        Cookies.remove("accessToken");
+        console.log("Yippee ki-yay, mother");
+        console.log(data);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const createAccessToken = () => {
+    console.log("Creating access token");
+    axios
+      .post(
+        "http://127.0.0.1:8000/api/refresh/",
+        { Cookies },
+        { withCredentials: true }
+      )
+      .then((response) => {
+        // Cookies.set("accessToken", response.data.token, {
+        //   sameSite: "None"
+        // });
+        // do we need to check response.status == 200?
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data["token"]}`;
+        console.log("Yippee ki-yay, mother");
+        console.log(response.data);
+        Cookies.set("accessToken", response.data.token, { expires: 7 });
+        return 1;
+      })
+      .catch((err) => {
+        console.log(err, "error");
+        navigate("/");
+        return 0;
+      });
+  };
+
+  const isLoggedIn = () => {
+    // console.log(`Bearer ${Cookies.get("accessToken")}`);
+    fetch("http://127.0.0.1:8000/api/user/", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        return 1;
+      })
+      .catch((error) => {
+        console.error(
+          "There has been a problem with your fetch operation:",
+          error
+        );
+        createAccessToken();
+      });
+  };
+
   return (
     <div>
-      <div className="flex justify-between fixed w-full items-center z-50 min-h-[5vh] bg-[#000] font-body top-0 left-0 text-text drop-shadow-xl shadow-text">
+      <div className="flex justify-between fixed w-full items-center z-20 min-h-[5vh] bg-[#000] font-body top-0 left-0 text-text drop-shadow-xl shadow-text py-4 md:py-0">
         <div className="flex gap-3 pl-[max(20px,7vw)] h-full items-center">
           <IconAlignBoxCenterMiddle
             className="sm:hidden"
@@ -26,9 +120,12 @@ function Navbar({ userName }) {
           />
 
           <IconTopologyStar3 />
-          <span className="text-xl text-accent tracking-wider font-black">
+          <Link
+            to=""
+            className="text-xl text-accent tracking-wider font-black "
+          >
             Sozialen Medien
-          </span>
+          </Link>
         </div>
         <div
           className={clsx(
@@ -45,36 +142,63 @@ function Navbar({ userName }) {
               Menu
             </div>
             <section className="flex flex-col gap-4">
-              <Link to="" className="text-xl text-text">
+              <Link to="" onClick={isLoggedIn} className="text-xl text-text">
                 Home
               </Link>
-              <Link to="manageFriends" className="text-xl text-text">
+              <Link
+                to="manageFriends"
+                onClick={isLoggedIn}
+                className="text-xl text-text"
+              >
                 Manage Friends
               </Link>
-              <Link to="communities" className="text-xl text-text">
+              <Link
+                to="communities"
+                onClick={isLoggedIn}
+                className="text-xl text-text"
+              >
                 Communities
               </Link>
-              <Link to="new_post" className="text-xl text-text">
-                Post
+              <Link to="" onClick={isLoggedIn} className="text-xl text-text">
+                Search{" "}
               </Link>
-              <Link to="new_community" className="text-xl text-text">
+              <Link
+                to="new_post"
+                onClick={isLoggedIn}
+                className="text-xl text-text"
+              >
+                New Post
+              </Link>
+              <Link
+                to="new_community"
+                onClick={isLoggedIn}
+                className="text-xl text-text"
+              >
                 New Community
               </Link>
             </section>
             <section className="flex flex-col gap-4">
               <div className="text-xl text-text">Saved Posts</div>
-              <div className="text-xl text-text">Logout</div>
+              <div className="text-xl text-text" onClick={logout}>
+                Logout
+              </div>
             </section>
           </div>
         </div>
         <div className="flex gap-3 h-full items-center pr-[max(20px,8vw)]">
-          <IconInputSearch />
-          <IconBellMinusFilled />
-          <IconUserCircle stroke={1} />
-          <div className="flex flex-col ">
-            <div className=" text-lg">Hello,</div>
-            <div className=" text-base ">{userName}</div>
-          </div>
+          <IconInputSearch className="hidden md:block" />
+          {/* <IconBellMinusFilled /> */}
+          <Link
+            to={`profile/${userName}`}
+            onClick={isLoggedIn}
+            className="flex gap-2 h-full items-center pl-4"
+          >
+            <IconUserCircle stroke={1} />
+            <div className="flex flex-col ">
+              <div className=" text-lg hidden md:block">Hello,</div>
+              <div className=" text-base ">{userName}</div>
+            </div>
+          </Link>
         </div>
       </div>
     </div>

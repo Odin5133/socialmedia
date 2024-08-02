@@ -24,23 +24,32 @@ const router = createBrowserRouter([
       {
         path: "",
         // element: <Feedx />,
-        element: <ProfilePage />,
+        element: <ProtectedRoute Component={Feedx} />,
       },
       {
         path: "manageFriends",
-        element: <ManageFriends />,
+        element: <ProtectedRoute Component={ManageFriends} />,
+        // element: <ManageFriends />,
       },
       {
         path: "communities",
-        element: <Communities />,
+        element: <ProtectedRoute Component={Communities} />,
+        // element: <Communities />,
       },
       {
         path: "new_post",
-        element: <NewPost />,
+        element: <ProtectedRoute Component={NewPost} />,
+        // element: <NewPost />,
       },
       {
         path: "new_community",
-        element: <NewCommunity />,
+        element: <ProtectedRoute Component={NewCommunity} />,
+        // element: <NewCommunity />,
+      },
+      {
+        path: "profile/:username",
+        element: <ProtectedRoute Component={ProfilePage} />,
+        // element: <ProfilePage />,
       },
     ],
   },
