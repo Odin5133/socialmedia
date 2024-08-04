@@ -7,7 +7,7 @@ function PrimaryComp({ curFriends }) {
     <div className="h-[36vh] overflow-y-scroll no-scrollbar">
       {curFriends.map((x) => (
         <Link
-          to={`profile/hello1`}
+          to={`profile/${x.username}`}
           key={x.username}
           className="flex gap-2 border-1 border border-primary bg-background text-text p-2 m-2 rounded-xl overflow-hidden text-ellipsis h-[8vh]"
         >
