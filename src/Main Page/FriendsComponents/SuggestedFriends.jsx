@@ -10,7 +10,7 @@ function SuggestedFriends() {
       .post(
         "http://127.0.0.1:8000/api/sendFriendRequest/",
         {
-          to_username: "hello1",
+          to_username: "test2",
         },
         {
           headers: {

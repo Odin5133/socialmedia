@@ -6,9 +6,10 @@ import SuggestedFriends from "./FriendsComponents/SuggestedFriends";
 import Cookies from "js-cookie";
 import { motion } from "framer-motion";
 
-function FriendsPanel() {
+function FriendsPanel({ curFriends }) {
   const [friendSection, setFriendsection] = useState("Primary");
   const [friendReq, setFriendReq] = useState([]);
+  // const [curFriends, setCurFriends] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +57,11 @@ function FriendsPanel() {
             Suggested
           </div>
         </div>
-        <div>{friendSection === "Primary" && <PrimaryComp />}</div>
+        <div>
+          {friendSection === "Primary" && (
+            <PrimaryComp curFriends={curFriends} />
+          )}
+        </div>
         <div>{friendSection === "Suggested" && <SuggestedFriends />}</div>
       </div>
       {friendReq.length > 0 && (

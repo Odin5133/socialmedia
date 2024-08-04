@@ -15,9 +15,13 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function Navbar({ userName }) {
+function Navbar({ userName, profilePic }) {
   // let [name, setName] = useState("Adrian Lobo");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // useEffect(() => {
+  //   console.log(profilePic);
+  // }, []);
 
   const navigate = useNavigate();
   const logout = (e) => {
@@ -193,7 +197,8 @@ function Navbar({ userName }) {
             onClick={isLoggedIn}
             className="flex gap-2 h-full items-center pl-4"
           >
-            <IconUserCircle stroke={1} />
+            {/* <IconUserCircle stroke={1} /> */}
+            <img src={profilePic} className=" rounded-full  h-10" />
             <div className="flex flex-col ">
               <div className=" text-lg hidden md:block">Hello,</div>
               <div className=" text-base ">{userName}</div>

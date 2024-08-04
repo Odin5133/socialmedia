@@ -55,10 +55,21 @@ function NewPost() {
       formData.append("image", file);
     }
 
+    // var user_id;
+    // axios
+    //   .get("http://127.0.0.1:8000/api/user/", {
+    //     headers: {
+    //       Authorization: `Bearer ${Cookies.get("accessToken")}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     formData.append("user", res.data.id);
+    //     console.log(res.data.id);
+    //   });
+
     axios
       .post("http://127.0.0.1:8000/api/createPost/", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${Cookies.get("accessToken")}`,
         },
       })
@@ -87,6 +98,44 @@ function NewPost() {
           </span>
         );
       });
+    // axios
+    //   .post(
+    //     "http://127.0.0.1:8000/api/createPost/",
+    //     {
+    //       title: title,
+    //       body: content,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${Cookies.get("accessToken")}`,
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log(res);
+    //     toast(
+    //       <span className="flex text-[#3fb041]  gap-1 items-center">
+    //         <IconCircleCheckFilled className="text-[#41b743] " size={19} />
+    //         New Post Created!
+    //       </span>
+    //     );
+
+    //     setTitle("");
+    //     setContent("");
+    //     setDataURL(null);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //     toast(
+    //       <span className="flex text-[#b03f3f]  gap-1 items-center">
+    //         <IconExclamationCircleFilled
+    //           className="text-[#b74141] "
+    //           size={19}
+    //         />
+    //         An error occured
+    //       </span>
+    //     );
+    //   });
   };
 
   return (

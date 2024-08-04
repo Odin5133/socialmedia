@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function NavPanel({ userName }) {
+function NavPanel({ userName, profilePic }) {
   const navigate = useNavigate();
 
   const logout = (e) => {
@@ -105,10 +105,11 @@ function NavPanel({ userName }) {
         <Link
           to={`profile/${userName}`}
           // to=""
-          className="flex w-full justify-evenly border border-2 bg-text rounded-xl px-2 py-4"
+          className="flex w-full justify-evenly border-2 bg-text rounded-xl px-2 py-4 h-fit items-center"
           onClick={isLoggedIn}
         >
-          <IconUserCircle stroke={2} />
+          {/* <IconUserCircle stroke={2} /> */}
+          <img src={profilePic} className=" rounded-full  h-9" />
           <span className="text-center">{userName}</span>
         </Link>
         <ul className="flex flex-col gap-6">

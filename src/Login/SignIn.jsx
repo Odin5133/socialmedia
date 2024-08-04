@@ -3,6 +3,12 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import {
+  IconCircleCheckFilled,
+  IconExclamationCircleFilled,
+} from "@tabler/icons-react";
+// import { Navigate } from "react-router-dom";
 
 function SignIn() {
   const [username, setUsername] = useState("");
@@ -11,6 +17,7 @@ function SignIn() {
   const [usernameSignUp, setUsernameSignUp] = useState("");
   const [emailSignUp, setEmailSignUp] = useState("");
   const [passwordSignUp, setPasswordSignUp] = useState("");
+  const Navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -44,31 +51,57 @@ function SignIn() {
       })
       .then((res) => {
         console.log(res.data);
+        toast(
+          <span className="flex text-[#3fb041]  gap-1 items-center">
+            <IconCircleCheckFilled className="text-[#41b743] " size={19} />
+            New Post Created!
+          </span>
+        );
+        setUsernameSignUp("");
+        setEmailSignUp("");
+        setPasswordSignUp("");
+        setSignOps(1);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast(
+          <span className="flex text-[#b03f3f]  gap-1 items-center">
+            <IconExclamationCircleFilled
+              className="text-[#b74141] "
+              size={19}
+            />
+            An error occured
+          </span>
+        );
       });
   };
 
-  // useEffect(() => {
-  //   console.log(`Bearer ${Cookies.get("accessToken")}`);
-  //   fetch("http://127.0.0.1:8000/api/user/", {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${Cookies.get("accessToken")}`,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => console.log(data))
-  //     .catch((error) =>
-  //       console.error(
-  //         "There has been a problem with your fetch operation:",
-  //         error
-  //       )
-  //     );
-  // }, []);
+  useEffect(() => {
+    console.log(`Bearer ${Cookies.get("accessToken")}`);
+    if (Cookies.get("accessToken") !== undefined) {
+      fetch("http://127.0.0.1:8000/api/user/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          Navigate("/feed");
+          return response.json();
+        })
+        .then((data) => console.log(data))
+        .catch((error) =>
+          console.error(
+            "There has been a problem with your fetch operation:",
+            error
+          )
+        );
+    }
+  }, []);
+
   useEffect(() => {
     createAccessToken();
   }, []);
@@ -161,119 +194,130 @@ function SignIn() {
   };
 
   return (
-    <div className="bg-[#000] p-[1vh] m-0 h-screen flex justify-center md:justify-start sm:p-[1vh]">
-      <div className=" md:w-[37vw]    bg-background rounded-xl font-heading ">
-        <div className="mx-8 flex flex-col justify-center h-full">
-          <div className="      text-5xl  text-primary leading-[0.9]">
-            {signOps ? "Welcome Back" : "Let's Get Started"}
-          </div>
-          <div className="text-secondary text-xl">
-            {signOps
-              ? "Dive into your personalized haven"
-              : "Ready for a new chapter!"}
-          </div>
-          <div className="flex  rounded-md mt-12 gap-2 w-[90%] justify-around px-2 relative items-center text-xl text-text border-primary border-2">
-            <motion.div
-              className=" absolute w-[49%] rounded-md h-[calc(100%-5px)]  bg-accent "
-              initial={{ x: "-50%" }}
-              animate={{ x: signOps ? "-50%" : "50%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 29 }}
-            />
-            <div
-              className="z-10 w-full flex justify-center cursor-pointer"
-              onClick={() => setSignOps(1)}
-            >
-              Sign In
+    <div>
+      <div className="bg-[#000] p-[1vh] m-0 h-screen flex justify-center md:justify-start sm:p-[1vh]">
+        <div className=" md:w-[37vw]    bg-background rounded-xl font-heading ">
+          <div className="mx-8 flex flex-col justify-center h-full">
+            <div className="      text-5xl  text-primary leading-[0.9]">
+              {signOps ? "Welcome Back" : "Let's Get Started"}
             </div>
-            <div
-              className="z-10 w-full flex justify-center cursor-pointer"
-              onClick={() => setSignOps(0)}
-            >
-              Sign Up
+            <div className="text-secondary text-xl">
+              {signOps
+                ? "Dive into your personalized haven"
+                : "Ready for a new chapter!"}
             </div>
-          </div>
-          {signOps ? (
-            <div className=" mt-10 text-text">
-              <form onSubmit={handleSignIn}>
-                <div className="">Username / E-Mail</div>
-                <input
-                  type="text"
-                  className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                  placeholder="InvincibleMe3"
-                  value={username}
-                  onChange={handleUsernameChange}
-                />
-                <div className=" mt-8">Password</div>
-                <input
-                  type="password"
-                  className="mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                  placeholder="SuperSecretPassword123"
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
-                <br />
-                <motion.button
-                  className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
-                  type="submit"
-                  initial={{ y: "170%" }}
-                  animate={{ y: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 29 }}
-                >
-                  Sign In
-                </motion.button>
-                <br />
-              </form>
-            </div>
-          ) : (
-            <div className=" mt-10 text-text">
-              <div className="">Username</div>
-              <input
-                type="text"
-                className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                placeholder="Username"
-                value={usernameSignUp}
-                onChange={handleUsernameChangeSignUp}
-              />
-              <div className=" mt-8">E-Mail</div>
-              <input
-                type="text"
-                className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                placeholder="Email"
-                value={emailSignUp}
-                onChange={handleEmailChangeSignUp}
-              />
+            <div className="flex  rounded-md mt-12 gap-2 w-[90%] justify-around px-2 relative items-center text-xl text-text border-primary border-2">
               <motion.div
-                className=" mt-8"
-                initial={{ y: "-170%" }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 29 }}
-              >
-                Password
-              </motion.div>
-              <motion.input
-                type="password"
-                className="mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                placeholder="Password"
-                value={passwordSignUp}
-                onChange={handlePasswordChangeSignUp}
-                initial={{ y: "-170%" }}
-                animate={{ y: 0 }}
+                className=" absolute w-[49%] rounded-md h-[calc(100%-5px)]  bg-accent "
+                initial={{ x: "-50%" }}
+                animate={{ x: signOps ? "-50%" : "50%" }}
                 transition={{ type: "spring", stiffness: 300, damping: 29 }}
               />
-              <br />
-              <div className="flex w-full  justify-center md:justify-start">
-                <motion.button
-                  initial={{ y: "-170%" }}
-                  animate={{ y: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 29 }}
-                  className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent "
-                  onClick={handleSignUp}
-                >
-                  Sign Up
-                </motion.button>
+              <div
+                className="z-10 w-full flex justify-center cursor-pointer"
+                onClick={() => setSignOps(1)}
+              >
+                Sign In
+              </div>
+              <div
+                className="z-10 w-full flex justify-center cursor-pointer"
+                onClick={() => setSignOps(0)}
+              >
+                Sign Up
               </div>
             </div>
-          )}
+            {signOps ? (
+              <div className=" mt-10 text-text">
+                <form onSubmit={handleSignIn}>
+                  <div className="">Username / E-Mail</div>
+                  <input
+                    type="text"
+                    className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                    placeholder="InvincibleMe3"
+                    value={username}
+                    onChange={handleUsernameChange}
+                    required
+                  />
+                  <div className=" mt-8">Password</div>
+                  <input
+                    type="password"
+                    className="mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                    placeholder="SuperSecretPassword123"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    required
+                  />
+                  <br />
+                  <motion.button
+                    className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                    type="submit"
+                    initial={{ y: "170%" }}
+                    animate={{ y: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 29 }}
+                  >
+                    Sign In
+                  </motion.button>
+                  <br />
+                </form>
+              </div>
+            ) : (
+              <form onSubmit={handleSignUp}>
+                <div className=" mt-10 text-text">
+                  <div className="">Username</div>
+                  <input
+                    type="text"
+                    className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                    placeholder="Username"
+                    value={usernameSignUp}
+                    onChange={handleUsernameChangeSignUp}
+                  />
+                  <div className=" mt-8">E-Mail</div>
+                  <input
+                    type="text"
+                    className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                    placeholder="Email"
+                    value={emailSignUp}
+                    onChange={handleEmailChangeSignUp}
+                  />
+                  <motion.div
+                    className=" mt-8"
+                    initial={{ y: "-170%" }}
+                    animate={{ y: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 29 }}
+                  >
+                    Password
+                  </motion.div>
+                  <motion.input
+                    type="password"
+                    className="mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                    placeholder="Password"
+                    value={passwordSignUp}
+                    onChange={handlePasswordChangeSignUp}
+                    initial={{ y: "-170%" }}
+                    animate={{ y: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 29 }}
+                  />
+                  <br />
+                  <div className="flex w-full  justify-center md:justify-start">
+                    <motion.button
+                      initial={{ y: "-170%" }}
+                      animate={{ y: 0 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 29,
+                      }}
+                      className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent "
+                      type="submit"
+                    >
+                      Sign Up
+                    </motion.button>
+                  </div>
+                </div>
+                <Toaster />
+              </form>
+            )}
+          </div>
         </div>
       </div>
     </div>

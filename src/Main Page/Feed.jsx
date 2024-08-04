@@ -13,6 +13,8 @@ import bg from "/bg.jpg";
 
 function Feed() {
   const [userName, setUserName] = useState("");
+  const [curFriends, setCurFriends] = useState([]);
+  const [profilePic, setProfilePic] = useState("");
   const location = useLocation();
 
   useEffect(() => {
@@ -39,6 +41,22 @@ function Feed() {
           error
         )
       );
+
+    axios
+      .post(
+        "http://127.0.0.1:8000/api/myFriends/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        setCurFriends(res.data);
+        // console.log(res.data[0].userPic);
+        setProfilePic(res.data[0].userPic);
+      });
   }, []);
 
   const isProfileRoute = /^\/feed\/profile\/[^/]+$/.test(location.pathname);
@@ -46,16 +64,16 @@ function Feed() {
   return (
     <div>
       <Toaster />
-      <Navbar userName={userName} />
+      <Navbar userName={userName} profilePic={profilePic} />
       <div className="flex justify-evenly pt-[calc(8vh)] min-h-screen w-full bg-hero bg-contain  relative">
-        <NavPanel userName={userName} />
+        <NavPanel userName={userName} profilePic={profilePic} />
         {/* <div className="flex flex-col items-center text-text font-body relative">
           {posts.map((post) => (
             <Posttemplate key={post.id} post={post} />
           ))}
         </div> */}
         <Outlet />
-        {!isProfileRoute && <FriendsPanel />}
+        {!isProfileRoute && <FriendsPanel curFriends={curFriends} />}
       </div>
     </div>
   );
