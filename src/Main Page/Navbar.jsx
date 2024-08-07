@@ -116,7 +116,7 @@ function Navbar({ userName, profilePic }) {
 
   return (
     <div>
-      <div className="flex justify-between fixed w-full items-center z-20 min-h-[5vh] bg-[#000] font-body top-0 left-0 text-text drop-shadow-xl shadow-text py-4 md:py-0">
+      <div className="flex justify-between fixed w-full items-center z-20 min-h-[5vh]  font-body top-0 left-0 text-text drop-shadow-xl shadow-text py-4 md:py-0">
         <div className="flex gap-3 pl-[max(20px,7vw)] h-full items-center">
           <IconAlignBoxCenterMiddle
             className="sm:hidden"

@@ -42,7 +42,7 @@ function ProfilePage() {
   }, [username]);
 
   return (
-    <div className="text-text w-[90vw] md:w-[62vw] lg:w-[62w] lg:mr-[8vw] font-heading bg-pseudobackground min-h-[80vh]  flex flex-col mt-8 rounded-xl mb-4">
+    <div className="text-text w-[90vw] md:w-[45vw] lg:w-[45w]  font-heading bg-pseudobackground min-h-[80vh]  flex flex-col mt-8 rounded-xl mb-4">
       {loading ? (
         <div className="flex h-full w-full items-center justify-center">
           Loading...
@@ -85,7 +85,7 @@ function ProfilePage() {
             <div className=" w-full flex flex-col items-center  ">
               {user.myposts &&
                 user.myposts.map((post) => (
-                  <Posttemplate key={post.id} post={post} />
+                  <TempPosttemplate key={post.id} post={post} />
                 ))}
             </div>
           </div>

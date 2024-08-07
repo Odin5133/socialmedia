@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 function PrimaryComp({ curFriends }) {
+  console.log(curFriends);
   return (
     <div className="h-[36vh] overflow-y-scroll no-scrollbar">
       {curFriends.map((x) => (

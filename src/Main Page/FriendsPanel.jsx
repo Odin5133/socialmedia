@@ -33,7 +33,7 @@ function FriendsPanel({ curFriends }) {
 
   return (
     <div className="min-w-[17vw] w-[17vw] hidden lg:block mt-8 ">
-      <div className="border-4 border-accent rounded-3xl px-2 pt-1 pb-3 flex w-full justify-center flex-col">
+      <div className="border-4 border-accent rounded-3xl px-2 pt-1 pb-3 flex w-full justify-center flex-col duration-150">
         <span className="text-primary text-2xl tracking-normal font-body leading-relaxed pl-4 ">
           Friends Tab
         </span>

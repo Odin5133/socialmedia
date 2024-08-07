@@ -105,7 +105,7 @@ function Feedx() {
 
 const EmptyFeed = () => {
   return (
-    <div className="rounded-xl pt-4 w-[90vw]  mt-8 bg-pseudobackground md:w-[45vw] lg:w-[45w] font-body min-h-[80vh] flex flex-col justify-evenly items-center ">
+    <div className="rounded-xl pt-4 w-[90vw]  mt-8 bg-pseudobackground md:w-[45vw] lg:w-[45vw] font-body min-h-[80vh] flex flex-col justify-evenly items-center ">
       <div>
         <IconGhost2Filled size={200} className=" text-background" />
         <div className="mt-4 font-semibold text-pseudobackground2 text-base text-center">

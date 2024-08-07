@@ -38,7 +38,8 @@ function SignIn() {
     setPasswordSignUp(e.target.value);
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = (e) => {
+    e.preventDefault();
     if (emailSignUp == "" || passwordSignUp == "") {
       alert("Please fill all the fields");
       return;
@@ -54,7 +55,7 @@ function SignIn() {
         toast(
           <span className="flex text-[#3fb041]  gap-1 items-center">
             <IconCircleCheckFilled className="text-[#41b743] " size={19} />
-            New Post Created!
+            New Account Created!
           </span>
         );
         setUsernameSignUp("");
@@ -314,12 +315,12 @@ function SignIn() {
                     </motion.button>
                   </div>
                 </div>
-                <Toaster />
               </form>
             )}
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }
