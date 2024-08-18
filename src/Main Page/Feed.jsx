@@ -12,33 +12,48 @@ import { Toaster } from "react-hot-toast";
 function Feed() {
   const [userName, setUserName] = useState("");
   const [curFriends, setCurFriends] = useState([]);
+  const [suggestedFriends, setSuggestedFriends] = useState([]);
   const [profilePic, setProfilePic] = useState("");
   const location = useLocation();
 
   useEffect(() => {
     console.log(`Bearer ${Cookies.get("accessToken")}`);
-    fetch("http://127.0.0.1:8000/api/user/", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    // fetch("http://127.0.0.1:8000/api/user/", {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: `Bearer ${Cookies.get("accessToken")}`,
+    //   },
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     setUserName(data.username);
+    //     console.log(data.username);
+    //   })
+    //   .catch((error) =>
+    //     console.error(
+    //       "There has been a problem with your fetch operation:",
+    //       error
+    //     )
+    //   );
+
+    axios
+      .get("http://127.0.0.1:8000/api/user/", {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
       })
-      .then((data) => {
-        setUserName(data.username);
-        console.log(data.username);
+      .then((res) => {
+        console.log(res.data);
+        setUserName(res.data.username);
       })
-      .catch((error) =>
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        )
-      );
+      .catch((err) => {
+        console.log(err);
+      });
 
     axios
       .post(
@@ -51,9 +66,25 @@ function Feed() {
         }
       )
       .then((res) => {
+        // setCurFriends(res.data.slice(1));
         setCurFriends(res.data);
         // console.log(res.data[0].userPic);
-        setProfilePic(res.data[0].userPic);
+        // setProfilePic(res.data[0].userPic); //IMPORTANT
+      });
+
+    axios
+      .post(
+        "http://127.0.0.1:8000/api/suggestedFriends/",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setSuggestedFriends(res.data);
       });
   }, []);
 
@@ -68,7 +99,6 @@ function Feed() {
             key={location.pathname}
             initial={{ y: -20, opacity: 0, scale: 0.99 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 20, opacity: 0, scale: 0.99 }}
             transition={{ duration: 0.4 }}
             className="flex flex-col items-center text-text font-body relative min-w-[90vw]
 md:min-w-[45vw] lg:min-w-[45w]"
@@ -77,7 +107,12 @@ md:min-w-[45vw] lg:min-w-[45w]"
           </motion.div>
         </AnimatePresence>
         {/* <Outlet /> */}
-        <FriendsPanel curFriends={curFriends} />
+        <FriendsPanel
+          curFriends={curFriends}
+          suggestedFriends={suggestedFriends}
+          setCurFriends={setCurFriends}
+          setSuggestedFriends={setSuggestedFriends}
+        />
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ export default {
       background: "#353d41",
       pseudobackground: "#181c1f",
       pseudobackground2: "#59676e",
-      primary: "#fc88b4",
+      primary: "#FF90B3",
       secondary: "#fc88b4",
       accent: "#8220e1",
       accent2: "#46107b",

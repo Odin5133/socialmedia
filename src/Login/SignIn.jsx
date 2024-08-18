@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import {
   IconCircleCheckFilled,
   IconExclamationCircleFilled,
+  IconSquareRoundedXFilled,
 } from "@tabler/icons-react";
+import { AnimatePresence, motion } from "framer-motion";
+import ForgotPassword from "./ForgotPassword";
 // import { Navigate } from "react-router-dom";
 
 function SignIn() {
@@ -17,6 +19,8 @@ function SignIn() {
   const [usernameSignUp, setUsernameSignUp] = useState("");
   const [emailSignUp, setEmailSignUp] = useState("");
   const [passwordSignUp, setPasswordSignUp] = useState("");
+  const [invalidCredentials, setInvalidCredentials] = useState(false);
+  const [forgotpassword, setForgotPassword] = useState(false);
   const Navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
@@ -62,6 +66,7 @@ function SignIn() {
         setEmailSignUp("");
         setPasswordSignUp("");
         setSignOps(1);
+        setInvalidCredentials(false);
       })
       .catch((err) => {
         console.log(err);
@@ -148,12 +153,16 @@ function SignIn() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Login successful:", data);
-        // Assuming the accessToken is still being sent in the response body
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${data["token"]}`;
-        navigate("/feed");
+        if (data.hasOwnProperty("token")) {
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${data["token"]}`;
+          navigate("/feed");
+        } else {
+          setInvalidCredentials(true);
+          setUsername("");
+          setPassword("");
+        }
       })
       .catch((error) => {
         console.error("Login error:", error);
@@ -198,126 +207,196 @@ function SignIn() {
     <div>
       <div className="bg-[#000] p-[1vh] m-0 h-screen flex justify-center md:justify-start sm:p-[1vh]">
         <div className=" md:w-[37vw]    bg-background rounded-xl font-heading ">
-          <div className="mx-8 flex flex-col justify-center h-full">
-            <div className="      text-5xl  text-primary leading-[0.9]">
-              {signOps ? "Welcome Back" : "Let's Get Started"}
-            </div>
-            <div className="text-secondary text-xl">
-              {signOps
-                ? "Dive into your personalized haven"
-                : "Ready for a new chapter!"}
-            </div>
-            <div className="flex  rounded-md mt-12 gap-2 w-[90%] justify-around px-2 relative items-center text-xl text-text border-primary border-2">
+          <AnimatePresence>
+            {!forgotpassword && (
               <motion.div
-                className=" absolute w-[49%] rounded-md h-[calc(100%-5px)]  bg-accent "
-                initial={{ x: "-50%" }}
-                animate={{ x: signOps ? "-50%" : "50%" }}
-                transition={{ type: "spring", stiffness: 300, damping: 29 }}
-              />
-              <div
-                className="z-10 w-full flex justify-center cursor-pointer"
-                onClick={() => setSignOps(1)}
+                className="mx-8 flex flex-col justify-center h-full"
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
               >
-                Sign In
-              </div>
-              <div
-                className="z-10 w-full flex justify-center cursor-pointer"
-                onClick={() => setSignOps(0)}
-              >
-                Sign Up
-              </div>
-            </div>
-            {signOps ? (
-              <div className=" mt-10 text-text">
-                <form onSubmit={handleSignIn}>
-                  <div className="">Username / E-Mail</div>
-                  <input
-                    type="text"
-                    className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                    placeholder="InvincibleMe3"
-                    value={username}
-                    onChange={handleUsernameChange}
-                    required
-                  />
-                  <div className=" mt-8">Password</div>
-                  <input
-                    type="password"
-                    className="mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                    placeholder="SuperSecretPassword123"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    required
-                  />
-                  <br />
-                  <motion.button
-                    className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
-                    type="submit"
-                    initial={{ y: "170%" }}
-                    animate={{ y: 0 }}
+                <div className="      text-5xl  text-primary leading-[0.9]">
+                  {signOps ? "Welcome Back" : "Let's Get Started"}
+                </div>
+                <div className="text-secondary text-xl">
+                  {signOps
+                    ? "Dive into your personalized haven"
+                    : "Ready for a new chapter!"}
+                </div>
+                <div className="flex  rounded-md mt-12 gap-2 w-[90%] justify-around px-2 relative items-center text-xl text-text border-primary border-2">
+                  <motion.div
+                    className=" absolute w-[49%] rounded-md h-[calc(100%-5px)]  bg-accent "
+                    initial={{ x: "-50%" }}
+                    animate={{ x: signOps ? "-50%" : "50%" }}
                     transition={{ type: "spring", stiffness: 300, damping: 29 }}
+                  />
+                  <div
+                    className="z-10 w-full flex justify-center cursor-pointer"
+                    onClick={() => {
+                      setSignOps(1);
+                      setInvalidCredentials(false);
+                    }}
                   >
                     Sign In
-                  </motion.button>
-                  <br />
-                </form>
-              </div>
-            ) : (
-              <form onSubmit={handleSignUp}>
-                <div className=" mt-10 text-text">
-                  <div className="">Username</div>
-                  <input
-                    type="text"
-                    className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                    placeholder="Username"
-                    value={usernameSignUp}
-                    onChange={handleUsernameChangeSignUp}
-                  />
-                  <div className=" mt-8">E-Mail</div>
-                  <input
-                    type="text"
-                    className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                    placeholder="Email"
-                    value={emailSignUp}
-                    onChange={handleEmailChangeSignUp}
-                  />
-                  <motion.div
-                    className=" mt-8"
-                    initial={{ y: "-170%" }}
-                    animate={{ y: 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 29 }}
+                  </div>
+                  <div
+                    className="z-10 w-full flex justify-center cursor-pointer"
+                    onClick={() => {
+                      setSignOps(0);
+                      setInvalidCredentials(false);
+                    }}
                   >
-                    Password
-                  </motion.div>
-                  <motion.input
-                    type="password"
-                    className="mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
-                    placeholder="Password"
-                    value={passwordSignUp}
-                    onChange={handlePasswordChangeSignUp}
-                    initial={{ y: "-170%" }}
-                    animate={{ y: 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 29 }}
-                  />
-                  <br />
-                  <div className="flex w-full  justify-center md:justify-start">
-                    <motion.button
-                      initial={{ y: "-170%" }}
-                      animate={{ y: 0 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 29,
-                      }}
-                      className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent "
-                      type="submit"
-                    >
-                      Sign Up
-                    </motion.button>
+                    Sign Up
                   </div>
                 </div>
-              </form>
+                {signOps ? (
+                  <div className=" mt-10 text-text">
+                    <form onSubmit={handleSignIn}>
+                      <div className="">Username / E-Mail</div>
+                      <div className="flex mt-2  items-center w-full">
+                        <input
+                          type="text"
+                          className="  rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                          placeholder="InvincibleMe3"
+                          value={username}
+                          onChange={handleUsernameChange}
+                          required
+                        />
+                        {invalidCredentials && (
+                          <IconSquareRoundedXFilled
+                            height={40}
+                            className="mx-2 m-0 text-[#ff2d2d]"
+                          />
+                        )}
+                      </div>
+                      <div className=" mt-8">Password</div>
+                      <div className="flex mt-2 items-center w-full">
+                        <input
+                          type="password"
+                          className=" rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                          placeholder="SuperSecretPassword123"
+                          value={password}
+                          onChange={handlePasswordChange}
+                          required
+                        />
+                        {invalidCredentials && (
+                          <IconSquareRoundedXFilled
+                            height={40}
+                            className="mx-2 m-0 text-[#ff2d2d]"
+                          />
+                        )}
+                      </div>
+                      <div className="mt-12 w-[90%] flex justify-between items-center">
+                        <motion.button
+                          className=" rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                          type="submit"
+                          initial={{ y: "170%" }}
+                          animate={{ y: 0 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 29,
+                          }}
+                        >
+                          Sign In
+                        </motion.button>
+                        <span
+                          className="underline text-[#808080] tracking-wide"
+                          onClick={() => {
+                            setForgotPassword(1);
+                          }}
+                        >
+                          Forgot Password?
+                        </span>
+                      </div>
+                      <br />
+                    </form>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSignUp}>
+                    <div className=" mt-10 text-text">
+                      <div className="">Username</div>
+                      <input
+                        type="text"
+                        className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                        placeholder="Username"
+                        value={usernameSignUp}
+                        onChange={handleUsernameChangeSignUp}
+                      />
+                      <div className=" mt-8">E-Mail</div>
+                      <input
+                        type="text"
+                        className=" mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                        placeholder="Email"
+                        value={emailSignUp}
+                        onChange={handleEmailChangeSignUp}
+                      />
+                      <motion.div
+                        className=" mt-8"
+                        initial={{ y: "-170%" }}
+                        animate={{ y: 0 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 29,
+                        }}
+                      >
+                        Password
+                      </motion.div>
+                      <motion.input
+                        type="password"
+                        className="mt-2 rounded-md px-2 py-1 w-[90%] bg-background border-2 border-primary text-text focus:outline-none focus:border-accent"
+                        placeholder="Password"
+                        value={passwordSignUp}
+                        onChange={handlePasswordChangeSignUp}
+                        initial={{ y: "-170%" }}
+                        animate={{ y: 0 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 29,
+                        }}
+                      />
+                      <br />
+                      <div className="flex w-full  justify-center md:justify-start">
+                        <motion.button
+                          initial={{ y: "-170%" }}
+                          animate={{ y: 0 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 29,
+                          }}
+                          className="mt-12 rounded-lg bg-accent px-4 py-1 text-xl border-2 border-primary text-text hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent "
+                          type="submit"
+                        >
+                          Sign Up
+                        </motion.button>
+                      </div>
+                    </div>
+                  </form>
+                )}
+              </motion.div>
             )}
-          </div>
+            {forgotpassword && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mx-8 flex flex-col justify-center h-full"
+              >
+                <div className="text-5xl  text-primary leading-[0.9]">
+                  Reset Password
+                </div>
+                <div className="text-secondary text-xl">Catchy Phrase</div>
+                <div className="mt-12">
+                  <ForgotPassword forgotpassword={setForgotPassword} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
       <Toaster />

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-function Request({ friendReq }) {
+function Request({ friendReq, setFriendReq }) {
   const [curFriends, setcurFriends] = useState([]);
 
   // useEffect(() => {
@@ -32,6 +32,8 @@ function Request({ friendReq }) {
       .then((res) => {
         // setFriendReq(res.data);
         console.log(res.data);
+        const updateReq = friendReq.filter((x) => x.id !== id);
+        setFriendReq(updateReq);
       });
   };
 
@@ -49,6 +51,8 @@ function Request({ friendReq }) {
       .then((res) => {
         // setFriendReq(res.data);
         console.log(res.data);
+        const updateReq = friendReq.filter((x) => x.id !== id);
+        setFriendReq(updateReq);
       });
   };
 
@@ -64,7 +68,11 @@ function Request({ friendReq }) {
               key={`${x.firstName}-${x.lastName}`}
               className="flex gap-2   overflow-hidden text-ellipsis h-[6vh]"
             >
-              <img src={x.from_user_pic} alt="Avatar" className=" h-full" />
+              <img
+                src={x.from_user_pic}
+                alt="Avatar"
+                className=" rounded-full aspect-square object-cover"
+              />
               <div className="h-full flex flex-col justify-center w-full items-center text-text font-body text-xl">
                 {x.from_user_username}
               </div>

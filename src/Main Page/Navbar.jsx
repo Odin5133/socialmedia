@@ -18,6 +18,8 @@ import axios from "axios";
 function Navbar({ userName, profilePic }) {
   // let [name, setName] = useState("Adrian Lobo");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [friendName, setFriendName] = useState("");
+  const [friendObj, setFriendObj] = useState([]);
 
   // useEffect(() => {
   //   console.log(profilePic);
@@ -114,9 +116,32 @@ function Navbar({ userName, profilePic }) {
       });
   };
 
+  const handleFriendSearch = (e) => {
+    setFriendName(e.target.value);
+    axios
+      .post(
+        "http://127.0.0.1:8000/api/searchUserDropdown/",
+        {
+          userField: e.target.value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setFriendObj(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
-      <div className="flex justify-between fixed w-full items-center z-20 min-h-[5vh]  font-body top-0 left-0 text-text drop-shadow-xl shadow-text py-4 md:py-0">
+      <div className="flex justify-between fixed w-full items-center z-20 min-h-[5vh] bg-[#000] font-body top-0 left-0 text-text drop-shadow-xl shadow-text py-4 md:py-0">
         <div className="flex gap-3 pl-[max(20px,7vw)] h-full items-center">
           <IconAlignBoxCenterMiddle
             className="sm:hidden"
@@ -191,9 +216,43 @@ function Navbar({ userName, profilePic }) {
         </div>
         <div className="flex gap-3 h-full items-center pr-[max(20px,8vw)]">
           <IconInputSearch className="hidden md:block" />
+          <div className="relative hidden md:block">
+            <input
+              type="text"
+              placeholder="Search Friends"
+              value={friendName}
+              onChange={handleFriendSearch}
+              className="w-full rounded-lg px-2 pr-10 mr-4 bg-pseudobackground2 text-text placeholder-text py-1"
+            />
+            <span
+              onClick={() => {
+                setFriendName("");
+              }}
+            >
+              <IconX className="absolute  right-2 top-1/2 transform -translate-y-1/2 bg-pseudobackground2 px-2 py-1 text-text cursor-pointer w-7" />
+            </span>
+            {friendObj.length > 0 && friendName.length >= 3 && (
+              <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                {friendObj.map((friend, index) => (
+                  <Link
+                    to={`profile/myfeed/${friend.username}`}
+                    key={index}
+                    className="px-4 py-2 hover:bg-pseudobackground
+                    cursor-pointer"
+                    onClick={() => {
+                      setFriendName("");
+                    }}
+                  >
+                    {friend.username}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* <IconBellMinusFilled /> */}
           <Link
-            to={`profile/${userName}`}
+            to={`profile/myfeed/${userName}`}
             onClick={isLoggedIn}
             className="flex gap-2 h-full items-center pl-4"
           >

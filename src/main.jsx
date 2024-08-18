@@ -11,6 +11,7 @@ import Communities from "./Main Page/Communities";
 import NewPost from "./Main Page/NewPost";
 import NewCommunity from "./Main Page/NewCommunity";
 import ProfilePage from "./Main Page/ProfilePage";
+import EditProfile from "./Main Page/ProfilePage/EditProfile";
 
 const router = createBrowserRouter([
   {
@@ -23,33 +24,36 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        // element: <Feedx />,
         element: <ProtectedRoute Component={Feedx} />,
       },
       {
         path: "manageFriends",
         element: <ProtectedRoute Component={ManageFriends} />,
-        // element: <ManageFriends />,
       },
       {
         path: "communities",
         element: <ProtectedRoute Component={Communities} />,
-        // element: <Communities />,
       },
       {
         path: "new_post",
         element: <ProtectedRoute Component={NewPost} />,
-        // element: <NewPost />,
       },
       {
         path: "new_community",
         element: <ProtectedRoute Component={NewCommunity} />,
-        // element: <NewCommunity />,
       },
       {
-        path: "profile/:username",
-        element: <ProtectedRoute Component={ProfilePage} />,
-        // element: <ProfilePage />,
+        path: "profile",
+        children: [
+          {
+            path: "myfeed/:username",
+            element: <ProfilePage />,
+          },
+          {
+            path: "editProfile/:username",
+            element: <EditProfile />,
+          },
+        ],
       },
     ],
   },

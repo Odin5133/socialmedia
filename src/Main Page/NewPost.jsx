@@ -24,8 +24,8 @@ function NewPost() {
 
     let file = null;
 
-    const processImg = () => {
-      const matches = dataURL.match(/^data:(.*);base64,(.*)$/);
+    const processImg = (image) => {
+      const matches = image.match(/^data:(.*);base64,(.*)$/);
       if (!matches || matches.length !== 3) {
         console.error("Invalid base64 data URL");
         return;
@@ -45,7 +45,7 @@ function NewPost() {
     };
 
     if (dataURL) {
-      processImg();
+      processImg(dataURL);
     }
 
     const formData = new FormData();
@@ -82,9 +82,9 @@ function NewPost() {
           </span>
         );
 
-        setTitle("");
-        setContent("");
-        setDataURL(null);
+        // setTitle("");
+        // setContent("");
+        // setDataURL(null);
       })
       .catch((error) => {
         console.error(error);

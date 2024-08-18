@@ -6,7 +6,12 @@ import SuggestedFriends from "./FriendsComponents/SuggestedFriends";
 import Cookies from "js-cookie";
 import { motion } from "framer-motion";
 
-function FriendsPanel({ curFriends }) {
+function FriendsPanel({
+  curFriends,
+  suggestedFriends,
+  setSuggestedFriends,
+  setCurFriends,
+}) {
   const [friendSection, setFriendsection] = useState("Primary");
   const [friendReq, setFriendReq] = useState([]);
   // const [curFriends, setCurFriends] = useState([]);
@@ -29,6 +34,7 @@ function FriendsPanel({ curFriends }) {
         });
     };
     fetchData();
+    console.log(suggestedFriends, curFriends);
   }, []);
 
   return (
@@ -59,10 +65,20 @@ function FriendsPanel({ curFriends }) {
         </div>
         <div>
           {friendSection === "Primary" && (
-            <PrimaryComp curFriends={curFriends} />
+            <PrimaryComp
+              curFriends={curFriends}
+              setCurFriends={setCurFriends}
+            />
           )}
         </div>
-        <div>{friendSection === "Suggested" && <SuggestedFriends />}</div>
+        <div>
+          {friendSection === "Suggested" && (
+            <SuggestedFriends
+              suggestedFriends={suggestedFriends}
+              setSuggestedFriends={setSuggestedFriends}
+            />
+          )}
+        </div>
       </div>
       {friendReq.length > 0 && (
         <div className="mt-8">
@@ -70,7 +86,7 @@ function FriendsPanel({ curFriends }) {
             Requests
           </span>
           <div>
-            <Request friendReq={friendReq} />
+            <Request friendReq={friendReq} setFriendReq={setFriendReq} />
           </div>
         </div>
       )}

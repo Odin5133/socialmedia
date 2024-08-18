@@ -103,7 +103,7 @@ function NavPanel({ userName, profilePic }) {
     <div className="w-[min(20vw,200px)]  hidden md:block sticky top-24 left-0 h-0">
       <div className=" flex-col justify-between h-[calc(100vh-10rem)] sticky rounded-2xl border-4 border-accent bg-pseudobackground p-4 flex">
         <Link
-          to={`profile/${userName}`}
+          to={`profile/myfeed/${userName}`}
           // to=""
           className="flex w-full justify-evenly border-2 bg-text rounded-xl px-2 py-4 h-fit items-center"
           onClick={isLoggedIn}

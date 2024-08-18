@@ -146,8 +146,14 @@ function Posttemplate({ post }) {
   return (
     <div className="  pt-4 w-[90vw] border-t border-b border-dotted rounded-lg mt-4 bg-pseudobackground md:w-[50vw] lg:w-[50w]">
       <div className="flex w-full justify-between px-8">
-        <Link to={`profile/${post.username}`} className=" flex items-center ">
-          <img src={post.userpic} className="h-6 rounded-full" />
+        <Link
+          to={`profile/myfeed/${post.username}`}
+          className=" flex items-center "
+        >
+          <img
+            src={post.userpic}
+            className="h-6 rounded-full aspect-square object-cover"
+          />
           <span className="ml-2 underline text-[0.9rem]">{`/${post.username}`}</span>
         </Link>
         <div>
@@ -160,7 +166,7 @@ function Posttemplate({ post }) {
             : `~${time.hours} hours ago`}
         </div>
       </div>
-      <h2 className=" text-2xl  px-8 text-bold">{post.title}</h2>
+      <h2 className=" text-2xl tracking-wide  px-8 text-bold">{post.title}</h2>
       {post.image && (
         <div className="mt-1 mx-8 flex justify-center bg-[#22272b] rounded-xl">
           <img

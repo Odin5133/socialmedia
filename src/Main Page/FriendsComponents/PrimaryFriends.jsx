@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-function PrimaryComp({ curFriends }) {
-  console.log(curFriends);
+function PrimaryComp({ curFriends, setCurFriends }) {
+  useEffect(() => {
+    console.log(curFriends);
+  }, []);
   return (
     <div className="h-[36vh] overflow-y-scroll no-scrollbar">
       {curFriends.map((x) => (
         <Link
-          to={`profile/${x.username}`}
+          to={`profile/myfeed/${x.username}`}
           key={x.username}
           className="flex gap-2 border-1 border border-primary bg-background text-text p-2 m-2 rounded-xl overflow-hidden text-ellipsis h-[8vh]"
         >
           <img
             src={x.userPic}
             alt={x.userPic}
-            className=" h-full rounded-full"
+            className=" h-full rounded-full aspect-square object-cover"
           />
           <div className="">
             <div className="font-body text-lg">{x.username}</div>
